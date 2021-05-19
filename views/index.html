@@ -8,9 +8,7 @@
     <title>Cars</title>
     <link rel="icon" href="/views/favicon/favicon (1).ico">
     <link rel="stylesheet" href="/views/bootstrap/bootstrap.min (2).css">
-    <script src="../models/car.js"></script>
-    <script src="../models/wheel.js"></script>
-    <script src="../controllers/controller.js"></script>
+
     <link rel="stylesheet" href="/views/style.css">
 </head>
 
@@ -18,108 +16,125 @@
     <div class="cabecera p-4 mb-5 bg-dark">
         <h1 class="display-1 text-muted">Coches</h1>
     </div>
-    <div class="container-fluid col-8 col-md-6 col-sm-6 text-justify text-dark">
-        <!-- Formulario coche -->
-        <div class="carForm d-flex flex-column align-items-center">
-            <form class="d-flex">
-                <div class="form-group p-0 ml-0 mr-3 mb-2 text-muted font-weight-bold text-center">
-                    <label>Matrícula</label>
-                    <input type="text" class="form-control" placeholder="Introduce matrícula" autocomplete="off"
-                        id="plate" onblur="inputPlate()">
-                    <div class="invalid-feedback" id="errorPlate"></div>
+    <div class="cover container-fluid mx-auto">
+        <div id="app" class="row">
+            <div class="col-md-4">
+                <!-- Formulario coche -->
+                <div id="carForm" class="card d-flex border-secondary">
+                    <div class="card-header text-center"></div>
+                    <h4 class="text-center">Registra tu coche</h4>
+                </div>
+                <form id="form1" class="card-body">
+                    <div class="form-group">
+                        <label for="plate">Matrícula</label>
+                        <input type="text" id="plate" placeholder="Introduce Matrícula" class="form-control">
+                        <div class="invalid-feedback" id="errorPlate"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="brand">Marca</label>
+                        <input type="text" id="brand" placeholder="Introduce Marca" class="form-control">
+                        <div class="invalid-feedback" id="errorBrand"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="color">Color</label>
+                        <input type="text" id="color" placeholder="Introduce Color" class="form-control">
+                        <div class="invalid-feedback" id="errorColor"></div>
+                    </div>
+                    <button type="button" onmousedown="createCar()" class="btn btn-primary btn-block">Crear Coche
+                    </button>
+                </form>
 
-                    <div class="form-group has-success">
+                <!-- Formulario ruedas -->
+                <div id="wheelForm" class="card d-none border-secondary">
+                    <div class="card-header text-center">
+                        <h4>Ruedas</h4>
                     </div>
+                    <form id="form2" class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="bWheel1">Marca 1</label>
+                                <input type="text" class="form-control" id="bWheel1" placeholder="Marca">
+                                <div class="invalid-feedback" id="errorBwheel1"></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dWheel1">Diametro 1</label>
+                                <input type="number" step="0.4" class="form-control" id="dWheel1"
+                                    placeholder="Diametro">
+                                <div class="invalid-feedback" id="errorDwheel1"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="bWheel2">Marca 2</label>
+                                <input type="text" class="form-control" id="bWheel2" placeholder="Marca">
+                                <div class="invalid-feedback" id="errorBwheel2"></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dWheel2">Diametro 2</label>
+                                <input type="number" step="0.4" class="form-control" id="dWheel2"
+                                    placeholder="Diametro">
+                                <div class="invalid-feedback" id="errorDwheel2"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="bWheel3">Marca 3</label>
+                                <input type="text" class="form-control" id="bWheel3" placeholder="Marca">
+                                <div class="invalid-feedback" id="errorBwheel3"></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dWheel3">Diametro 3</label>
+                                <input type="number" step="0.4" class="form-control" id="dWheel3"
+                                    placeholder="Diametro">
+                                <div class="invalid-feedback" id="errorDwheel3"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="bWheel4">Marca 4</label>
+                                <input type="text" class="form-control" id="bWheel4" placeholder="Marca">
+                                <div class="invalid-feedback" id="errorBwheel4"></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dWheel4">Diametro 4</label>
+                                <input type="number" step="0.4" class="form-control" id="dWheel4"
+                                    placeholder="Diametro">
+                                <div class="invalid-feedback" id="errorDwheel4">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" onmousedown="addWheels()" class="btn btn-primary btn-block"> Añadir Rueda
+                        </button>
+                    </form>
                 </div>
-                <div class="form-group p-0 mr-3 mb-2 text-muted font-weight-bold text-center">
-                    <label>Marca</label>
-                    <input type="text" class="form-control" placeholder="Introduce marca" autocomplete="off" id="brand"
-                        onblur="inputBrand()">
-                    <div class="invalid-feedback" id="errorBrand"></div>
+            </div>
+
+            <!-- Listado coches registrados-->
+            <div id="carList" class="card col-12 col-md-7 p-0 d-flex container-fluid border-secondary"
+                style="height: 415px;">
+                <div class="card-header text-center">
+                    <h4>Coches Registrados</h4>
                 </div>
-                <div class="form-group p-0 mr-3 mr-lg-0 mb-2 text-muted font-weight-bold text-center">
-                    <label>Color</label>
-                    <input type="text" class="form-control" placeholder="Introduce color" autocomplete="off" id="color"
-                        onblur="inputColor()">
-                    <div class="invalid-feedback" id="errorColor"></div>
-                </div>
-            </form>
-            <button id="createCar" class="btn-dark rounded font-weight-bold mt-3 p-2" onmousedown="createCar()">Crear
-            </button>
+                <div class="overflow-auto" id="carInfo"></div>
+            </div>
+
         </div>
-        <!-- Formulario ruedas -->
-        <div class="wheelForm d-none">
-            <form class="d-flex flex-grow-1 justify-content-center">
-                <div class="rueda1">
-                    <div class="form-group mr-3 mb-0">
-                        <label>Rueda 1</label>
-                        <input type="text" class="form-control" placeholder="Marca" autocomplete="off" id="marcaRueda1"
-                            onblur="inputWheelBrand(1)">
-                        <div class="invalid-feedback" id="errorWheelBrand1"></div>
-                    </div>
-                    <div class="form-group mr-3 mb-0">
-                        <input type="number" step="0.01" placeholder="Diámetro" class="form-control" autocomplete="off"
-                            id="diametroRueda1" onblur="inputDiameter(1)">
-                        <div class="invalid-feedback" id="errorDiameter1"></div>
-                    </div>
-                </div>
-                <div class="rueda2">
-                    <div class="form-group mr-3 mb-0">
-                        <label>Rueda 2</label>
-                        <input type="text" class="form-control" placeholder="Marca" autocomplete="off" id="marcaRueda2"
-                            onblur="inputWheelBrand(2)">
-                        <div class="invalid-feedback" id="errorWheelBrand2"></div>
-                    </div>
-                    <div class="form-group mr-3 mb-0">
-                        <input type="number" step="0.01" placeholder="Diámetro" class="form-control" autocomplete="off"
-                            id="diametroRueda2" onblur="inputDiameter(2)">
-                        <div class="invalid-feedback" id="errorDiameter2"></div>
-                    </div>
-                </div>
-                <div class="rueda3">
-                    <div class="form-group mr-3 mb-0">
-                        <label>Rueda 3</label>
-                        <input type="text" class="form-control" placeholder="Marca" autocomplete="off" id="marcaRueda3"
-                            onblur="inputWheelBrand(3)">
-                        <div class="invalid-feedback" id="errorWheelBrand3"></div>
-                    </div>
-                    <div class="form-group mr-3 mb-0">
-                        <input type="number" step="0.01" placeholder="Diámetro" class="form-control" autocomplete="off"
-                            id="diametroRueda3" onblur="inputDiameter(3)">
-                        <div class="invalid-feedback" id="errorDiameter3"></div>
-                    </div>
-                </div>
-                <div class="rueda4">
-                    <div class="form-group mr-3 mb-0">
-                        <label>Rueda 4</label>
-                        <input type="text" class="form-control" placeholder="Marca" autocomplete="off" id="marcaRueda4"
-                            onblur="inputWheelBrand(4)">
-                        <div class="invalid-feedback" id="errorWheelBrand4"></div>
-                    </div>
-                    <div class="form-group mr-3 mb-0">
-                        <input type="number" step="0.01" placeholder="Diámetro" class="form-control" autocomplete="off"
-                            id="diametroRueda4" onblur="inputDiameter(4)">
-                        <div class="invalid-feedback" id="errorDiameter4"></div>
-                    </div>
-                </div>
-            </form>
-            <button id="addWheels" class="btn-dark rounded font-weight-bold mt-3 p-2" onmousedown="ruedas(car)">Añadir
-                Rueda</button>
-        </div>
-        <!-- Car Info -->
-        <div id="informacion"></div>
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
-        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous">
-    </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
-        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous">
-    </script>
+        <script src="../models/car.js"></script>
+        <script src="../models/wheel.js"></script>
+        <script src="../controllers/controller.js"></script>
+        <!-- Optional JavaScript -->
+        <!-- Bootstrap scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+        </script>
+
 </body>
 
 </html>

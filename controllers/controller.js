@@ -1,220 +1,124 @@
 "use strict";
-var car = [];
+var car;
+var arrayCar = new Array();
+var carForm = document.getElementById("carForm");
+var wheelForm = document.getElementById("wheelForm");
+var carInfo = document.getElementById("carInfo");
+// Crear un coche y añadirle ruedas //
 function createCar() {
-    var plate = document.querySelector("#plate");
-    var brand = document.querySelector("#brand");
-    var color = document.querySelector("#color");
-    if (!validateCar()) {
-        return;
-    }
-    //Validar coche
-    function validateCar() {
-        var retPlate = inputPlate();
-        var retBrand = inputBrand();
-        var retColor = inputColor();
-        if (retPlate && retBrand && retColor) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    //Input matrícula
-    function inputPlate() {
-        var plate = document.querySelector("#plate");
-        plate.classList.remove("is-invalid");
-        var regEx = /^(\d{4}[b-df-hj-np-tv-z]{3})*$/gi;
-        if (plate.value == "") {
-            plate.classList.add("is-invalid");
-            var matricula = document.querySelector("#errorPlate");
-            matricula.textContent = "Introduce una matrícula.";
-            return false;
-        }
-        else if (!regEx.test(plate.value)) {
-            plate.classList.add("is-invalid");
-            var matricula = document.querySelector("#errorPlate");
-            matricula.textContent = "Formato de matrícula incorrecto.";
-            return false;
-        }
-        return true;
-    }
-    //Input marca
-    function inputBrand() {
-        var brand = document.querySelector("#brand");
-        brand.classList.remove("is-invalid");
-        if (brand.value == "") {
-            brand.classList.add("is-invalid");
-            var marca = document.querySelector("#errorBrand");
-            marca.textContent = "Introduce una marca.";
-            return false;
-        }
-        return true;
-    }
-    //Input color
-    function inputColor() {
-        var color = document.querySelector("#color");
-        color.classList.remove("is-invalid");
-        if (color.value == "") {
-            color.classList.add("is-invalid");
-            var colorCar = document.querySelector("#errorColor");
-            colorCar.textContent = "Introduce un color.";
-            return false;
-        }
-        return true;
-    }
-    //Instanciamos
-    car.push(new Car(plate.value, color.value, brand.value));
-    showCar(car);
-    var carForm = document.querySelector(".carForm");
-    carForm.classList.remove("d-flex");
-    carForm.classList.add("d-none");
-    var wheelForm = document.querySelector(".wheelForm");
-    wheelForm.classList.remove("d-none");
-    wheelForm.classList.add("d-flex", "flex-column", "align-items-center");
-}
-//Mostrar coche
-function showCar(car) {
-    var info = document.querySelector("#informacion");
-    var container = document.createElement("div");
-    container.classList.add("container", "text-success", "text-align-center");
-    var subTitle = document.createElement("h4");
-    var carInfo = document.createElement("p");
-    carInfo.classList.add("infoCoche", "text-white", "list-group-item");
-    subTitle.classList.add("tituloCoche", "list-inline-item");
-    carInfo.append(subTitle);
-    container.prepend(subTitle, carInfo);
-    info.prepend(container);
-    for (var i = 0; i < car.length; i++) {
-        subTitle.textContent = "\n    Coche " + (i + 1);
-        carInfo.textContent = "\n    Matr\u00EDcula : " + car[i].plate + " ,\n    Marca : " + car[i].brand + " , \n    Color : " + car[i].color + " \n     ";
+    var plate = document.getElementById("plate");
+    var brand = document.getElementById("brand");
+    var color = document.getElementById("color");
+    if (validateCar(plate, color, brand)) {
+        car = new Car(plate.value, color.value, brand.value);
+        console.log(car);
+        arrayCar.push(car);
+        // Ocultar carForm , mostrar wheelForm //
+        carForm.classList.remove("d-flex");
+        carForm.classList.add("d-none");
+        wheelForm.classList.remove("d-none");
+        wheelForm.classList.add("d-flex");
+        showCar();
     }
 }
-//Inputs marcas
-function marcasRuedas() {
-    var marcasRuedas = [];
-    for (var i = 0; i < 4; i++) {
-        var marca = document.querySelector("#marcaRueda" + (i + 1));
-        marcasRuedas[i] = marca.value;
-    }
-    return marcasRuedas;
-}
-//Añadir ruedas
-function ruedas(car) {
-    var diametros = diametrosRuedas();
-    var marcas = marcasRuedas();
-    //Valido
-    if (!validateWheels()) {
-        return;
-    }
-    //Inputs ruedas
-    function inputWheelBrand(i) {
-        var marcaRueda = document.querySelector("#marcaRueda" + i);
-        marcaRueda.classList.remove("is-invalid");
-        if (marcaRueda.value == "") {
-            marcaRueda.classList.add("is-invalid");
-            var wheelB = document.querySelector("#errorWheelBrand" + i);
-            wheelB.textContent = "Introduce la marca de la rueda " + i;
-            return false;
-        }
-        return true;
-    }
-    //Validar ruedas
-    function validateWheels() {
-        var retMarca = [];
-        var retDiametro = [];
-        var flag = true;
+function addWheels() {
+    if (validateWheels()) {
         for (var i = 1; i <= 4; i++) {
-            retMarca[i - 1] = inputWheelBrand(i);
-            retDiametro[i - 1] = inputDiameter(i);
-            if (retMarca[i - 1] && retDiametro[i - 1]) {
-                flag = true;
-            }
-            else {
-                flag = false;
-            }
+            var diameter = (document.getElementById("dWheel" + i)).value;
+            var brand = document.getElementById("bWheel" + i)
+                .value;
+            car.addWheel(new Wheel(diameter, brand));
         }
-        if (flag) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    //Añadimos ruedas
-    var ruedas = [];
-    for (var i = 0; i < 4; i++) {
-        ruedas[i] = new Wheel(diametros[i], marcas[i]);
-        car[car.length - 1].addWheel(ruedas[i]);
-    }
-    showWheels(car);
-    console.log(car);
-    reset();
-}
-//Mostrar ruedas
-function showWheels(car) {
-    var container = document.querySelector(".container");
-    var infoCoche = document.querySelector(".infoCoche");
-    var tituloCoche = document.querySelector(".tituloCoche");
-    var ruedas = car[car.length - 1].wheels;
-    for (var i = ruedas.length - 1; i >= 0; i--) {
-        var wheelInfo = document.createElement("li");
-        container.prepend(wheelInfo);
-        var diameter = ruedas[i].diameter;
-        var brand = ruedas[i].brand;
-        wheelInfo.textContent = "Rueda " + (i + 1) + ": Marca = " + brand + " - Con di\u00E1metro = " + diameter;
-        wheelInfo.before(infoCoche);
-        infoCoche.before(tituloCoche);
+        console.log(car.wheels);
+        console.log(arrayCar);
+        showWheel();
+        /* Ocultar form wheel, mostrar form car. Resetear formularios  */
+        wheelForm.classList.remove("d-flex");
+        wheelForm.classList.add("d-none");
+        document.getElementById("form2").reset();
+        carForm.classList.remove("d-none");
+        carForm.classList.add("d-flex");
+        document.getElementById("form1").reset();
     }
 }
-//Inputs diámetros
-function diametrosRuedas() {
-    var diametrosRuedas = [];
-    for (var i = 0; i < 4; i++) {
-        var diametro = document.querySelector("#diametroRueda" + (i + 1));
-        diametrosRuedas[i] = diametro.valueAsNumber;
-    }
-    return diametrosRuedas;
+// Funciones para mostrar un coche y sus ruedas.//
+function showCar() {
+    var newDiv = document.createElement("div");
+    carInfo.appendChild(newDiv).innerHTML = "\n  <br>\n  <div class=\"row col-12 text-center\">\n          <div class=\"col-4\"><div class=\"font-weight-bold\">Car Plate</div>" + car.plate + "</div>\n          <div class=\"col-4\"><div class=\"font-weight-bold\">Brand</div>" + car.brand + "</div>\n          <div class=\"col-4\"><div class=\"font-weight-bold\">Color</div>" + car.color + "</div>\n  </div>\n  ";
 }
-//Valida Diámetros
-function inputDiameter(i) {
-    var diametroRueda = document.querySelector("#diametroRueda" + i);
-    diametroRueda.classList.remove("is-invalid");
-    if (diametroRueda.value == "") {
-        diametroRueda.classList.add("is-invalid");
-        var wheelB = document.querySelector("#errorDiameter" + i);
-        wheelB.textContent = "Introduce el di\u00E1metro de la rueda " + i;
+function showWheel() {
+    var newDiv = document.createElement("div");
+    carInfo.appendChild(newDiv).innerHTML = "\n  <br>\n  <div class=\"row col-12 text-center\">\n          <div class=\"col-3\"><div class=\"font-weight-bold\">Wheel 1</div>\n              Brand: " + car.wheels[0].brand + " \n              <p>Diameter: " + car.wheels[0].diameter + "</p></div>\n          <div class=\"col-3\"><div class=\"font-weight-bold\">Wheel 2</div>\n              Brand: " + car.wheels[1].brand + "\n              <p>Diameter: " + car.wheels[1].diameter + "</p></div>\n          <div class=\"col-3\"><div class=\"font-weight-bold\">Wheel 3</div>\n              Brand: " + car.wheels[2].brand + "\n              <p>Diameter: " + car.wheels[2].diameter + "</p></div>\n          <div class=\"col-3\"><div class=\"font-weight-bold\">Wheel 4</div>\n              Brand: " + car.wheels[3].brand + "\n              <p>Diameter: " + car.wheels[3].diameter + "</p></div>\n          </div>";
+}
+// Validación de Campos //
+function validateCar(plate, color, brand) {
+    var accumError = 0;
+    plate.classList.remove("is-invalid");
+    color.classList.remove("is-invalid");
+    brand.classList.remove("is-invalid");
+    var errorPlate = document.getElementById("errorPlate");
+    var errorColor = document.getElementById("errorColor");
+    var errorBrand = document.getElementById("errorBrand");
+    if (plate.value == "") {
+        required(plate, errorPlate);
+        accumError = +1;
+    }
+    else if (!validatePlate(plate.value)) {
+        plate.classList.add("is-invalid");
+        errorPlate.textContent = "La matrícula debe contener 4 numeros y 3 letras.";
+        accumError = +1;
+    }
+    if (color.value == "") {
+        required(color, errorColor);
+        accumError = +1;
+    }
+    if (brand.value == "") {
+        required(brand, errorBrand);
+        accumError = +1;
+    }
+    if (accumError > 0) {
         return false;
     }
-    else if (diametroRueda.valueAsNumber < 0.4 ||
-        diametroRueda.valueAsNumber > 2) {
-        diametroRueda.classList.add("is-invalid");
-        var wheelB = document.querySelector("#errorDiameter" + i);
-        wheelB.textContent = "El diámetro debe estar entre 0.4 y 2.";
+    else {
+        return true;
+    }
+}
+function validatePlate(plate) {
+    var plateReg = /^(\d{4}[b-df-hj-np-tv-z]{3})*$/gi;
+    return plateReg.test(plate) ? true : false;
+}
+function required(inputId, errorId) {
+    inputId.classList.add("is-invalid");
+    errorId.textContent = "El campo es requerido";
+}
+function validateWheels() {
+    var accumError = 0;
+    /* Bucle para recorrer inputs ruedas */
+    for (var i = 1; i <= 4; i++) {
+        var diameter = document.getElementById("dWheel" + i);
+        var brandW = document.getElementById("bWheel" + i);
+        var errorDiameter = (document.getElementById("errorDwheel" + i));
+        var errorBrandW = (document.getElementById("errorBwheel" + i));
+        diameter.classList.remove("is-invalid");
+        brandW.classList.remove("is-invalid");
+        if (diameter.value == "") {
+            required(diameter, errorDiameter);
+            accumError = +1;
+        }
+        else if (diameter.value < 0.4 || diameter.value > 2) {
+            diameter.classList.add("is-invalid");
+            errorDiameter.textContent = "El diámetro debe estar entre 0.4 y 2.";
+            accumError = +1;
+        }
+        if (brandW.value == "") {
+            required(brandW, errorBrandW);
+            accumError = +1;
+        }
+    }
+    if (accumError > 0) {
         return false;
     }
-    return true;
-}
-//Reset
-function reset() {
-    var wheelForm = document.querySelector(".wheelForm");
-    wheelForm.classList.remove("d-flex");
-    wheelForm.classList.add("d-none");
-    var carForm = document.querySelector(".carForm");
-    carForm.classList.remove("d-none");
-    carForm.classList.add("d-flex");
-    //Inputs
-    var plate = document.querySelector("#plate");
-    var brand = document.querySelector("#brand");
-    var color = document.querySelector("#color");
-    plate.value = "";
-    brand.value = "";
-    color.value = "";
-    for (var i = 1; i <= 4; i++) {
-        var diametro = document.querySelector("#diametroRueda" + i);
-        diametro.value = "";
-    }
-    for (var i = 1; i <= 4; i++) {
-        var marca = document.querySelector("#marcaRueda" + i);
-        marca.value = "";
+    else {
+        return true;
     }
 }
