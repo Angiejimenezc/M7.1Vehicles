@@ -1,6 +1,6 @@
 # M7.1Vehicles
 
-![Vehiculos](/controllers/asset/vehiculos.png)
+![Vehiculos](views/vehiculos.png)
 
 Nivel 1
 1) Nos dan un código parcialmente desarrollado. Es capaz de crear un coche y mostrar la información en pantalla. Lo podemos descargar de este link ( https://github.com/ITAcademyProjects/VehiclesFE ). Únicamente habrá que modificar el archivo  index.html  y el  controller.ts
